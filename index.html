@@ -1,411 +1,473 @@
-import React, { useState, useEffect } from 'react';
-import { Code, Database, Gamepad2, Brain, Terminal, Send, ChevronDown, ExternalLink, Github, Linkedin, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
-
-const Portfolio = () => {
-  const [activeSection, setActiveSection] = useState('home');
-  const [scrolled, setScrolled] = useState(false);
-  
-  // Estados para el carrusel
-  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
-
-  // Detectar scroll para la barra de navegación
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Ajustar items por página del carrusel según el tamaño de la pantalla
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setItemsPerPage(1);
-      } else if (window.innerWidth < 1024) {
-        setItemsPerPage(2);
-      } else {
-        setItemsPerPage(3);
-      }
-    };
-
-    // Ejecutar al inicio
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Datos personales y técnicos
-  const personalData = {
-    name: "Yodan Dev",
-    title: "Arquitecto de Software & Emprendedor Tecnológico",
-    location: "Bogotá, Colombia",
-    age: 36,
-    bio: "Más que código, construyo sistemas. Con 36 años y una base sólida en Colombia, fusiono la lógica estricta del backend con la creatividad del desarrollo de videojuegos. Mi enfoque no es solo técnico; aplico principios de psicología y estrategia para crear software que no solo funcione, sino que domine su mercado. Mi meta es clara: transformar líneas de código en activos de alto valor.",
-  };
-
-  const skills = [
-    { name: "PHP", level: 100, icon: <Terminal size={20} />, category: "Backend" },
-    { name: "Laravel", level: 100, icon: <Code size={20} />, category: "Backend" },
-    { name: "JavaScript", level: 100, icon: <Code size={20} />, category: "Frontend" },
-    { name: "HTML/CSS", level: 100, icon: <Code size={20} />, category: "Frontend" },
-    { name: "MySQL", level: 75, icon: <Database size={20} />, category: "Database" },
-    { name: "Java", level: 70, icon: <Code size={20} />, category: "Backend" },
-    { name: "C# / Unity", level: 60, icon: <Gamepad2 size={20} />, category: "Game Dev" },
-    { name: "MongoDB", level: 40, icon: <Database size={20} />, category: "Database" },
-  ];
-
-  const projects = [
-    {
-      title: "Nexus Enterprise Core",
-      desc: "Sistema ERP escalable desarrollado con Laravel y PHP puro. Optimización de procesos empresariales con una arquitectura limpia.",
-      tags: ["Laravel", "PHP", "MySQL", "Vue.js"],
-      type: "SaaS / Enterprise"
-    },
-    {
-      title: "Shadow Mind AI",
-      desc: "Plataforma experimental que integra IA para análisis de patrones de comportamiento. Un paso hacia la psicología computacional.",
-      tags: ["Python", "TensorFlow", "React", "Node.js"],
-      type: "Inteligencia Artificial"
-    },
-    {
-      title: "Aether Chronicles",
-      desc: "Prototipo de videojuego RPG desarrollado en Unity/C#. Mecánicas complejas y narrativa inmersiva.",
-      tags: ["Unity", "C#", "3D Modeling"],
-      type: "Videojuego"
-    },
-    {
-      title: "Quantum Ledger",
-      desc: "Aplicación financiera descentralizada (DeFi). Contratos inteligentes seguros y análisis de mercado en tiempo real.",
-      tags: ["Solidity", "Web3.js", "React", "Node.js"],
-      type: "Fintech / Blockchain"
-    },
-    {
-      title: "Cyber Sentinel",
-      desc: "Herramienta de monitoreo de red y detección de intrusiones. Enfocada en la seguridad ofensiva y defensiva.",
-      tags: ["Python", "Bash", "Linux", "Networking"],
-      type: "Ciberseguridad"
-    }
-  ];
-
-  const nextProject = () => {
-    setCurrentProjectIndex((prev) => 
-      prev + 1 > projects.length - itemsPerPage ? 0 : prev + 1
-    );
-  };
-
-  const prevProject = () => {
-    setCurrentProjectIndex((prev) => 
-      prev - 1 < 0 ? projects.length - itemsPerPage : prev - 1
-    );
-  };
-
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setActiveSection(id);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-200 font-sans selection:bg-red-900 selection:text-white overflow-x-hidden">
-      
-      {/* Navbar */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-neutral-950/90 backdrop-blur-md border-b border-red-900/30 py-4' : 'bg-transparent py-6'}`}>
-        <div className="container mx-auto px-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold tracking-tighter text-white">
-            YODAN<span className="text-red-600">.DEV</span>
-          </h1>
-          <div className="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
-            {['Inicio', 'Biografía', 'Habilidades', 'Proyectos', 'Contacto'].map((item) => (
-              <button 
-                key={item}
-                onClick={() => scrollToSection(item.toLowerCase() === 'inicio' ? 'home' : item.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))}
-                className="hover:text-red-500 transition-colors uppercase"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-          {/* Mobile Menu Icon Placeholder - Simplified for this layout */}
-          <div className="md:hidden text-red-500">
-            <Terminal size={24} />
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Gradients */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-red-900/10 rounded-full blur-3xl"></div>
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yodan Dev - Arquitecto de Software</title>
+    <!-- Tailwind CSS (via CDN para asegurar estilos) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Personalizaciones adicionales */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
         
-        <div className="container mx-auto px-6 relative z-10 text-center">
-          <div className="inline-block mb-4 px-3 py-1 border border-red-900/50 rounded-full bg-red-950/20 backdrop-blur-sm">
-            <span className="text-red-500 text-xs font-bold tracking-widest uppercase">Disponible para proyectos de alto impacto</span>
-          </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tight leading-none">
-            CÓDIGO <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800">MAESTRO</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-neutral-400 max-w-2xl mx-auto mb-10 font-light">
-            Desarrollo de Software. Inteligencia Artificial. <span className="text-white font-medium">Dominio Digital.</span>
-          </p>
-          <div className="flex flex-col md:flex-row justify-center gap-4">
-            <button onClick={() => scrollToSection('proyectos')} className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-none border border-red-500 font-bold transition-all hover:shadow-[0_0_20px_rgba(220,38,38,0.5)]">
-              VER ARSENAL
-            </button>
-            <button onClick={() => scrollToSection('contacto')} className="bg-transparent hover:bg-neutral-900 text-white px-8 py-4 border border-neutral-700 font-medium transition-all">
-              CONTACTAR
-            </button>
-          </div>
-        </div>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a; /* neutral-950 */
+            color: #e5e5e5; /* neutral-200 */
+        }
+        
+        ::selection {
+            background-color: #7f1d1d; /* red-900 */
+            color: white;
+        }
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-red-600">
-          <ChevronDown size={32} />
-        </div>
-      </section>
+        /* Utilidad para ocultar scrollbar en carrusel si fuera necesario */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neutral: {
+                            950: '#0a0a0a',
+                            900: '#171717',
+                            800: '#262626',
+                        },
+                        red: {
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                            950: '#450a0a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="overflow-x-hidden">
 
-      {/* Biography Section */}
-      <section id="biografia" className="py-24 bg-neutral-950 relative border-t border-neutral-900">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="order-2 md:order-1 relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-red-600 to-black opacity-20 blur-lg rounded-xl"></div>
-              <div className="relative bg-neutral-900 border border-neutral-800 p-8 rounded-xl shadow-2xl">
-                <Brain className="text-red-500 mb-6" size={48} />
-                <h3 className="text-2xl font-bold text-white mb-4">La Mente detrás del Código</h3>
-                <ul className="space-y-4 text-neutral-400">
-                  <li className="flex items-center gap-3">
-                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                    <span>Edad: {personalData.age} años</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                    <span>Ubicación: {personalData.location}</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                    <span>Enfoque: Full Stack & AI Strategy</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                    <span>Intereses: Psicología, Estrategia, Finanzas</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-tighter text-white">
+                YODAN<span class="text-red-600">.DEV</span>
+            </h1>
             
-            <div className="order-1 md:order-2">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-                Sobre <span className="text-red-600">Mí</span>
-              </h2>
-              <p className="text-lg text-neutral-400 leading-relaxed mb-6">
-                {personalData.bio}
-              </p>
-              <p className="text-lg text-neutral-400 leading-relaxed">
-                Mi trayectoria en el desarrollo de software (PHP, Java, C#) es solo la base. 
-                Estoy obsesionado con la escalabilidad y la eficiencia. No busco simplemente "hacer funcionar" las cosas; 
-                busco crear sistemas robustos que sean la piedra angular de negocios millonarios.
-              </p>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
+                <a href="#home" class="hover:text-red-500 transition-colors uppercase">Inicio</a>
+                <a href="#biografia" class="hover:text-red-500 transition-colors uppercase">Biografía</a>
+                <a href="#habilidades" class="hover:text-red-500 transition-colors uppercase">Habilidades</a>
+                <a href="#proyectos" class="hover:text-red-500 transition-colors uppercase">Proyectos</a>
+                <a href="#contacto" class="hover:text-red-500 transition-colors uppercase">Contacto</a>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Skills Section */}
-      <section id="habilidades" className="py-24 bg-neutral-900 relative">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Nivel <span className="text-red-600">Técnico</span>
-            </h2>
-            <p className="text-neutral-400 max-w-xl mx-auto">
-              Un despliegue de mis capacidades actuales y dominio sobre las herramientas de creación digital.
+            <!-- Mobile Menu Icon -->
+            <div class="md:hidden text-red-500">
+                <i data-lucide="terminal" class="w-6 h-6"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Gradients -->
+        <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>
+        <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-red-900/10 rounded-full blur-3xl"></div>
+        
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <div class="inline-block mb-4 px-3 py-1 border border-red-900/50 rounded-full bg-red-950/20 backdrop-blur-sm">
+                <span class="text-red-500 text-xs font-bold tracking-widest uppercase">Disponible para proyectos de alto impacto</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tight leading-none">
+                CÓDIGO <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800">MAESTRO</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-neutral-400 max-w-2xl mx-auto mb-10 font-light">
+                Desarrollo de Software. Inteligencia Artificial. <span class="text-white font-medium">Dominio Digital.</span>
             </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {skills.map((skill, index) => (
-              <div key={index} className="group bg-neutral-950 border border-neutral-800 p-6 hover:border-red-600/50 transition-all duration-300 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-red-600">
-                  {skill.icon}
-                </div>
-                
-                <h3 className="text-xl font-bold text-white mb-1">{skill.name}</h3>
-                <span className="text-xs text-red-500 uppercase tracking-widest font-semibold">{skill.category}</span>
-                
-                <div className="mt-6">
-                  <div className="flex justify-between text-sm text-neutral-400 mb-2">
-                    <span>Dominio</span>
-                    <span className="text-white font-mono">{skill.level}%</span>
-                  </div>
-                  <div className="w-full bg-neutral-800 h-2 rounded-full overflow-hidden">
-                    <div 
-                      className="bg-red-600 h-full rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)] transition-all duration-1000 ease-out"
-                      style={{ width: `${skill.level}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="#proyectos" class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 border border-red-500 font-bold transition-all hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] flex items-center justify-center">
+                    VER ARSENAL
+                </a>
+                <a href="#contacto" class="bg-transparent hover:bg-neutral-900 text-white px-8 py-4 border border-neutral-700 font-medium transition-all flex items-center justify-center">
+                    CONTACTAR
+                </a>
+            </div>
         </div>
-      </section>
 
-      {/* Projects Section - CAROUSEL UPDATE */}
-      <section id="proyectos" className="py-24 bg-neutral-950 border-t border-neutral-900 overflow-hidden">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                Proyectos <span className="text-red-600">Realizados</span>
-              </h2>
-              <p className="text-neutral-400">Selección de trabajos de alto calibre.</p>
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-red-600">
+            <i data-lucide="chevron-down" class="w-8 h-8"></i>
+        </div>
+    </section>
+
+    <!-- Biography Section -->
+    <section id="biografia" class="py-24 bg-neutral-950 relative border-t border-neutral-900">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1 relative">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-red-600 to-black opacity-20 blur-lg rounded-xl"></div>
+                    <div class="relative bg-neutral-900 border border-neutral-800 p-8 rounded-xl shadow-2xl">
+                        <i data-lucide="brain" class="text-red-500 mb-6 w-12 h-12"></i>
+                        <h3 class="text-2xl font-bold text-white mb-4">La Mente detrás del Código</h3>
+                        <ul class="space-y-4 text-neutral-400">
+                            <li class="flex items-center gap-3">
+                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                <span>Edad: 36 años</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                <span>Ubicación: Bogotá, Colombia</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                <span>Enfoque: Full Stack & AI Strategy</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                <span>Intereses: Psicología, Estrategia, Finanzas</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="order-1 md:order-2">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-8">
+                        Sobre <span class="text-red-600">Mí</span>
+                    </h2>
+                    <p class="text-lg text-neutral-400 leading-relaxed mb-6">
+                        Más que código, construyo sistemas. Con 36 años y una base sólida en Colombia, fusiono la lógica estricta del backend con la creatividad del desarrollo de videojuegos. Mi enfoque no es solo técnico; aplico principios de psicología y estrategia para crear software que no solo funcione, sino que domine su mercado. Mi meta es clara: transformar líneas de código en activos de alto valor.
+                    </p>
+                    <p class="text-lg text-neutral-400 leading-relaxed">
+                        Mi trayectoria en el desarrollo de software (PHP, Java, C#) es solo la base. 
+                        Estoy obsesionado con la escalabilidad y la eficiencia. No busco simplemente "hacer funcionar" las cosas; 
+                        busco crear sistemas robustos que sean la piedra angular de negocios millonarios.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="habilidades" class="py-24 bg-neutral-900 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Nivel <span class="text-red-600">Técnico</span>
+                </h2>
+                <p class="text-neutral-400 max-w-xl mx-auto">
+                    Un despliegue de mis capacidades actuales y dominio sobre las herramientas de creación digital.
+                </p>
+            </div>
+
+            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Skills will be injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section (Carousel) -->
+    <section id="proyectos" class="py-24 bg-neutral-950 border-t border-neutral-900 overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                        Proyectos <span class="text-red-600">Realizados</span>
+                    </h2>
+                    <p class="text-neutral-400">Selección de trabajos de alto calibre.</p>
+                </div>
+                
+                <div class="flex items-center gap-4 mt-6 md:mt-0">
+                    <!-- Carousel Controls -->
+                    <button id="prevBtn" class="p-3 border border-neutral-700 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all active:scale-95 text-neutral-400">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <button id="nextBtn" class="p-3 border border-neutral-700 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all active:scale-95 text-neutral-400">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Carousel Window -->
+            <div class="relative overflow-hidden -mx-4 px-4">
+                <div id="carousel-track" class="flex transition-transform duration-500 ease-in-out w-full">
+                    <!-- Projects injected via JS -->
+                </div>
             </div>
             
-            <div className="flex items-center gap-4 mt-6 md:mt-0">
-               {/* Carousel Controls */}
-               <button 
-                onClick={prevProject} 
-                className="p-3 border border-neutral-700 rounded-none hover:bg-red-600 hover:border-red-600 hover:text-white transition-all active:scale-95"
-                aria-label="Proyecto anterior"
-               >
-                 <ChevronLeft size={24} />
-               </button>
-               <button 
-                onClick={nextProject} 
-                className="p-3 border border-neutral-700 rounded-none hover:bg-red-600 hover:border-red-600 hover:text-white transition-all active:scale-95"
-                aria-label="Siguiente proyecto"
-               >
-                 <ChevronRight size={24} />
-               </button>
+            <!-- Progress Indicators -->
+            <div id="carousel-indicators" class="flex justify-center mt-10 gap-2">
+                <!-- Indicators injected via JS -->
             </div>
-          </div>
+        </div>
+    </section>
 
-          {/* Carousel Container */}
-          <div className="relative overflow-hidden -mx-4 px-4">
-             <div 
-               className="flex transition-transform duration-500 ease-in-out"
-               style={{ transform: `translateX(-${currentProjectIndex * (100 / itemsPerPage)}%)` }}
-             >
-                {projects.map((project, index) => (
-                  <div 
-                    key={index} 
-                    className="flex-shrink-0 px-4"
-                    style={{ width: `${100 / itemsPerPage}%` }}
-                  >
-                    <div className="bg-neutral-900 group hover:-translate-y-2 transition-transform duration-300 border-l-4 border-transparent hover:border-red-600 h-full flex flex-col">
-                      <div className="h-48 bg-neutral-800 relative overflow-hidden flex items-center justify-center flex-shrink-0">
-                        {/* Placeholder for Project Image */}
-                        <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-800/50 transition-colors">
-                            <Terminal size={48} className="text-neutral-700 group-hover:text-red-600 transition-colors" />
+    <!-- CTA / Contact Section -->
+    <section id="contacto" class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-neutral-900">
+            <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-red-900/10 to-transparent"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto bg-black border border-neutral-800 p-8 md:p-12 shadow-2xl rounded-sm">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Iniciemos el Protocolo</h2>
+                    <p class="text-neutral-400">
+                        Si buscas resultados ordinarios, busca a otro. Si quieres construir el futuro y generar riqueza, envíame un mensaje.
+                    </p>
+                </div>
+
+                <form class="space-y-6" onsubmit="event.preventDefault(); alert('Protocolo de transmisión iniciado. Mensaje (simulado) enviado.');">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-red-500 ml-1">NOMBRE</label>
+                            <input type="text" class="w-full bg-neutral-900 border border-neutral-800 text-white px-4 py-3 focus:outline-none focus:border-red-600 transition-colors placeholder-neutral-600" placeholder="Tu nombre o empresa">
                         </div>
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-sm">
-                          <button className="p-2 bg-red-600 rounded-full text-white hover:bg-red-700"><ExternalLink size={20}/></button>
-                          <button className="p-2 bg-white rounded-full text-black hover:bg-gray-200"><Github size={20}/></button>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-red-500 ml-1">CORREO</label>
+                            <input type="email" class="w-full bg-neutral-900 border border-neutral-800 text-white px-4 py-3 focus:outline-none focus:border-red-600 transition-colors placeholder-neutral-600" placeholder="correo@ejemplo.com">
                         </div>
-                      </div>
-                      <div className="p-8 flex-grow flex flex-col">
-                        <span className="text-red-500 text-xs font-bold uppercase tracking-wide">{project.type}</span>
-                        <h3 className="text-xl font-bold text-white mt-2 mb-3">{project.title}</h3>
-                        <p className="text-neutral-400 text-sm mb-6 leading-relaxed flex-grow">
-                          {project.desc}
-                        </p>
-                        <div className="flex flex-wrap gap-2 mt-auto">
-                          {project.tags.map(tag => (
-                            <span key={tag} className="px-3 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-sm border border-neutral-700">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                ))}
-             </div>
-          </div>
-          
-          {/* Progress Indicators */}
-          <div className="flex justify-center mt-10 gap-2">
-            {Array.from({ length: Math.ceil(projects.length / itemsPerPage) + (itemsPerPage === 1 ? 0 : 1) }).map((_, idx) => {
-               // Simplification for dots logic to match slide groups roughly, or just map all projects if simple
-               // For this implementation, let's just show dots for total slides possible to jump to.
-               // Actually, simpler: just map projects and highlight current index, though that might be too many dots.
-               // Let's do simple dots for current active index relative to total
-               return (
-                 <button
-                   key={idx}
-                   onClick={() => setCurrentProjectIndex(idx)}
-                   className={`h-1 transition-all duration-300 ${idx === currentProjectIndex ? 'w-8 bg-red-600' : 'w-2 bg-neutral-800 hover:bg-neutral-700'}`}
-                   disabled={idx > projects.length - itemsPerPage} // Disable dots that would show empty space
-                   style={{display: idx > projects.length - itemsPerPage ? 'none' : 'block'}}
-                 />
-               )
-            })}
-          </div>
-
-        </div>
-      </section>
-
-      {/* CTA / Contact Section */}
-      <section id="contacto" className="py-24 relative overflow-hidden">
-        {/* Abstract Background */}
-        <div className="absolute inset-0 bg-neutral-900">
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-red-900/10 to-transparent"></div>
-        </div>
-
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-4xl mx-auto bg-black border border-neutral-800 p-8 md:p-12 shadow-2xl rounded-sm">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Iniciemos el Protocolo</h2>
-              <p className="text-neutral-400">
-                Si buscas resultados ordinarios, busca a otro. Si quieres construir el futuro y generar riqueza, envíame un mensaje.
-              </p>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-red-500 ml-1">MENSAJE</label>
+                        <textarea rows="4" class="w-full bg-neutral-900 border border-neutral-800 text-white px-4 py-3 focus:outline-none focus:border-red-600 transition-colors placeholder-neutral-600" placeholder="Describe tu visión..."></textarea>
+                    </div>
+                    <button class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 text-white font-bold py-4 tracking-widest flex items-center justify-center gap-2 group transition-all">
+                        ENVIAR TRANSMISIÓN <i data-lucide="send" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </form>
             </div>
-
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-red-500 ml-1">NOMBRE</label>
-                  <input type="text" className="w-full bg-neutral-900 border border-neutral-800 text-white px-4 py-3 focus:outline-none focus:border-red-600 transition-colors placeholder-neutral-600" placeholder="Tu nombre o empresa" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-red-500 ml-1">CORREO</label>
-                  <input type="email" className="w-full bg-neutral-900 border border-neutral-800 text-white px-4 py-3 focus:outline-none focus:border-red-600 transition-colors placeholder-neutral-600" placeholder="correo@ejemplo.com" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-red-500 ml-1">MENSAJE</label>
-                <textarea rows="4" className="w-full bg-neutral-900 border border-neutral-800 text-white px-4 py-3 focus:outline-none focus:border-red-600 transition-colors placeholder-neutral-600" placeholder="Describe tu visión..."></textarea>
-              </div>
-              <button className="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 text-white font-bold py-4 tracking-widest flex items-center justify-center gap-2 group transition-all">
-                ENVIAR TRANSMISIÓN <Send size={18} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-            </form>
-          </div>
         </div>
-      </section>
+    </section>
 
-      {/* Footer */}
-      <footer className="bg-black py-8 border-t border-neutral-900">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            <span className="text-xl font-bold text-white">YODAN<span className="text-red-600">.DEV</span></span>
-            <p className="text-neutral-500 text-xs mt-1">© 2024 Todos los derechos reservados.</p>
-          </div>
-          <div className="flex gap-6">
-             <a href="#" className="text-neutral-500 hover:text-red-500 transition-colors"><Linkedin size={20} /></a>
-             <a href="#" className="text-neutral-500 hover:text-red-500 transition-colors"><Github size={20} /></a>
-             <a href="#" className="text-neutral-500 hover:text-red-500 transition-colors"><Mail size={20} /></a>
-          </div>
+    <!-- Footer -->
+    <footer class="bg-black py-8 border-t border-neutral-900">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="text-xl font-bold text-white">YODAN<span class="text-red-600">.DEV</span></span>
+                <p class="text-neutral-500 text-xs mt-1">© 2024 Todos los derechos reservados.</p>
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="text-neutral-500 hover:text-red-500 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                <a href="#" class="text-neutral-500 hover:text-red-500 transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                <a href="#" class="text-neutral-500 hover:text-red-500 transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></a>
+            </div>
         </div>
-      </footer>
-    </div>
-  );
-};
+    </footer>
 
-export default Portfolio;
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Data Configuration
+        const skillsData = [
+            { name: "PHP", level: 100, icon: "terminal", category: "Backend" },
+            { name: "Laravel", level: 100, icon: "code", category: "Backend" },
+            { name: "JavaScript", level: 100, icon: "code", category: "Frontend" },
+            { name: "HTML/CSS", level: 100, icon: "code", category: "Frontend" },
+            { name: "MySQL", level: 75, icon: "database", category: "Database" },
+            { name: "Java", level: 70, icon: "code", category: "Backend" },
+            { name: "C# / Unity", level: 60, icon: "gamepad-2", category: "Game Dev" },
+            { name: "MongoDB", level: 40, icon: "database", category: "Database" },
+        ];
+
+        const projectsData = [
+            {
+                title: "Nexus Enterprise Core",
+                desc: "Sistema ERP escalable desarrollado con Laravel y PHP puro. Optimización de procesos empresariales con una arquitectura limpia.",
+                tags: ["Laravel", "PHP", "MySQL", "Vue.js"],
+                type: "SaaS / Enterprise"
+            },
+            {
+                title: "Shadow Mind AI",
+                desc: "Plataforma experimental que integra IA para análisis de patrones de comportamiento. Un paso hacia la psicología computacional.",
+                tags: ["Python", "TensorFlow", "React", "Node.js"],
+                type: "Inteligencia Artificial"
+            },
+            {
+                title: "Aether Chronicles",
+                desc: "Prototipo de videojuego RPG desarrollado en Unity/C#. Mecánicas complejas y narrativa inmersiva.",
+                tags: ["Unity", "C#", "3D Modeling"],
+                type: "Videojuego"
+            },
+            {
+                title: "Quantum Ledger",
+                desc: "Aplicación financiera descentralizada (DeFi). Contratos inteligentes seguros y análisis de mercado en tiempo real.",
+                tags: ["Solidity", "Web3.js", "React", "Node.js"],
+                type: "Fintech / Blockchain"
+            },
+            {
+                title: "Cyber Sentinel",
+                desc: "Herramienta de monitoreo de red y detección de intrusiones. Enfocada en la seguridad ofensiva y defensiva.",
+                tags: ["Python", "Bash", "Linux", "Networking"],
+                type: "Ciberseguridad"
+            }
+        ];
+
+        // State
+        let currentProjectIndex = 0;
+        let itemsPerPage = 3;
+
+        // DOM Elements
+        const navbar = document.getElementById('navbar');
+        const skillsContainer = document.getElementById('skills-container');
+        const carouselTrack = document.getElementById('carousel-track');
+        const indicatorsContainer = document.getElementById('carousel-indicators');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSkills();
+            handleResize(); // Set initial itemsPerPage
+            renderProjects();
+            updateCarousel();
+            lucide.createIcons(); // Initialize Icons
+        });
+
+        // --- Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-neutral-950/90', 'backdrop-blur-md', 'border-b', 'border-red-900/30', 'py-4');
+                navbar.classList.remove('bg-transparent', 'py-6');
+            } else {
+                navbar.classList.remove('bg-neutral-950/90', 'backdrop-blur-md', 'border-b', 'border-red-900/30', 'py-4');
+                navbar.classList.add('bg-transparent', 'py-6');
+            }
+        });
+
+        // --- Render Skills ---
+        function renderSkills() {
+            skillsContainer.innerHTML = skillsData.map(skill => `
+                <div class="group bg-neutral-950 border border-neutral-800 p-6 hover:border-red-600/50 transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-red-600">
+                        <i data-lucide="${skill.icon}" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">${skill.name}</h3>
+                    <span class="text-xs text-red-500 uppercase tracking-widest font-semibold">${skill.category}</span>
+                    <div class="mt-6">
+                        <div class="flex justify-between text-sm text-neutral-400 mb-2">
+                            <span>Dominio</span>
+                            <span class="text-white font-mono">${skill.level}%</span>
+                        </div>
+                        <div class="w-full bg-neutral-800 h-2 rounded-full overflow-hidden">
+                            <div class="bg-red-600 h-full rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)] transition-all duration-1000 ease-out" style="width: ${skill.level}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- Carousel Logic ---
+        function handleResize() {
+            if (window.innerWidth < 768) {
+                itemsPerPage = 1;
+            } else if (window.innerWidth < 1024) {
+                itemsPerPage = 2;
+            } else {
+                itemsPerPage = 3;
+            }
+            updateCarousel();
+            renderIndicators(); // Re-render indicators as page count might change
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        function renderProjects() {
+            // We only render the items once, then just translate the track
+            carouselTrack.innerHTML = projectsData.map((project, index) => `
+                <div class="flex-shrink-0 px-4 carousel-item" style="width: 100%;">
+                    <div class="bg-neutral-900 group hover:-translate-y-2 transition-transform duration-300 border-l-4 border-transparent hover:border-red-600 h-full flex flex-col">
+                        <div class="h-48 bg-neutral-800 relative overflow-hidden flex items-center justify-center flex-shrink-0">
+                            <div class="absolute inset-0 bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-800/50 transition-colors">
+                                <i data-lucide="terminal" class="w-12 h-12 text-neutral-700 group-hover:text-red-600 transition-colors"></i>
+                            </div>
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-sm">
+                                <button class="p-2 bg-red-600 rounded-full text-white hover:bg-red-700"><i data-lucide="external-link" class="w-5 h-5"></i></button>
+                                <button class="p-2 bg-white rounded-full text-black hover:bg-gray-200"><i data-lucide="github" class="w-5 h-5"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <span class="text-red-500 text-xs font-bold uppercase tracking-wide">${project.type}</span>
+                            <h3 class="text-xl font-bold text-white mt-2 mb-3">${project.title}</h3>
+                            <p class="text-neutral-400 text-sm mb-6 leading-relaxed flex-grow">${project.desc}</p>
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                ${project.tags.map(tag => `<span class="px-3 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-sm border border-neutral-700">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Re-run icons for injected content
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function updateCarousel() {
+            // Update width of each item based on current itemsPerPage
+            const items = document.querySelectorAll('.carousel-item');
+            items.forEach(item => {
+                item.style.width = `${100 / itemsPerPage}%`;
+            });
+
+            // Calculate translation
+            const translateValue = -(currentProjectIndex * (100 / itemsPerPage));
+            carouselTrack.style.transform = `translateX(${translateValue}%)`;
+            
+            renderIndicators();
+        }
+
+        function renderIndicators() {
+            const totalPages = Math.ceil(projectsData.length / itemsPerPage) + (itemsPerPage === 1 ? 0 : 0); 
+            // Simplified logic: Create dot for each possible start position that makes sense?
+            // Let's stick to the React logic: One dot per item, highlight current, hide unattainable ones
+            
+            indicatorsContainer.innerHTML = projectsData.map((_, idx) => {
+                const isHidden = idx > projectsData.length - itemsPerPage;
+                const isActive = idx === currentProjectIndex;
+                const widthClass = isActive ? 'w-8 bg-red-600' : 'w-2 bg-neutral-800 hover:bg-neutral-700';
+                
+                if (isHidden) return '';
+                
+                return `<button onclick="goToProject(${idx})" class="h-1 transition-all duration-300 ${widthClass}"></button>`;
+            }).join('');
+        }
+
+        window.goToProject = (index) => {
+            currentProjectIndex = index;
+            updateCarousel();
+        };
+
+        nextBtn.addEventListener('click', () => {
+            if (currentProjectIndex + 1 > projectsData.length - itemsPerPage) {
+                currentProjectIndex = 0;
+            } else {
+                currentProjectIndex++;
+            }
+            updateCarousel();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentProjectIndex - 1 < 0) {
+                currentProjectIndex = projectsData.length - itemsPerPage;
+            } else {
+                currentProjectIndex--;
+            }
+            updateCarousel();
+        });
+
+    </script>
+</body>
+</html>
