@@ -1,14 +1,15 @@
-# Usamos Nginx en su versión Alpine (la más ligera y segura para producción)
+# 1. Usamos la base ligera de Nginx
 FROM nginx:alpine
 
-# Copiamos su archivo HTML al directorio público de Nginx
-# Si tiene carpetas de 'css', 'js' o 'assets', descomente las líneas de abajo
+# 2. Copiamos el cerebro (HTML)
 COPY index.html /usr/share/nginx/html/index.html
-# COPY css /usr/share/nginx/html/css
-# COPY js /usr/share/nginx/html/js
-# COPY assets /usr/share/nginx/html/assets
 
-# Exponemos el puerto 80 (Estándar Web)
+# 3. Copiamos el alma (La imagen)
+# IMPORTANTE: El nombre del archivo aquí debe ser IDÉNTICO al real (mayúsculas/minúsculas importan en Linux)
+COPY izofer.png /usr/share/nginx/html/izofer.png
+
+# Si tuviera más imágenes, una carpeta entera es más eficiente:
+# COPY assets/ /usr/share/nginx/html/assets/
+
+# 4. Abrimos el puerto
 EXPOSE 80
-
-# Nginx se inicia automáticamente, no requiere CMD extra
