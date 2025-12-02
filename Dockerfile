@@ -6,7 +6,7 @@ COPY index.html /usr/share/nginx/html/index.html
 
 # 3. Copiamos el alma (La imagen)
 # IMPORTANTE: El nombre del archivo aquí debe ser IDÉNTICO al real (mayúsculas/minúsculas importan en Linux)
-COPY izofer.png /usr/share/nginx/html/izofer.png
+COPY izofer.svg /usr/share/nginx/html/izofer.svg
 
 # Si tuviera más imágenes, una carpeta entera es más eficiente:
 # COPY assets/ /usr/share/nginx/html/assets/
