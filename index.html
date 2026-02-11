@@ -490,5 +490,55 @@
         });
 
     </script>
+
+    <script>
+        const WEBHOOK_URL = 'https://curso-n8n-n8n.kraqr1.easypanel.host/webhook/007225f7-8a81-4533-9601-88af2b6c612e';
+        const form = document.querySelector('form');
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            // Capturamos el botón para dar feedback visual
+            const btn = form.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'PROCESANDO...';
+            btn.disabled = true;
+
+            // n8n puede recibir FormData directamente si el nodo Webhook está configurado así,
+            // pero lo más seguro es enviar un JSON estructurado.
+            const formData = new FormData(form);
+            const payload = {
+                nombre: formData.get('nombre'),
+                correo: formData.get('correo'),
+                mensaje: formData.get('mensaje')
+            };
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if(result.state === "success") {
+                        alert('Transmisión exitosa. Los datos están en manos de n8n, Mi señor.');
+                        form.reset();
+                    }
+                } else {
+                    throw new Error('Fallo en la respuesta del servidor');
+                }
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                alert('Hubo un error en la transmisión de datos.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        };
+    </script>
 </body>
 </html>
