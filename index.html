@@ -3,259 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/favicon.png">
-    <title>IZOFER - Desarrollo de Software & IA</title>
-    <!-- Tailwind CSS (via CDN para asegurar estilos) -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <title>IZOFER — Desarrollo de Software & IA</title>
+    <meta name="description" content="IZOFER · Desarrollo de software de alto impacto, inteligencia artificial y videojuegos. Sistemas robustos que dominan su mercado.">
+
+    <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        /* Personalizaciones adicionales */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a; /* neutral-950 */
-            color: #e5e5e5; /* neutral-200 */
-        }
-        
-        ::selection {
-            background-color: #7f1d1d; /* red-900 */
-            color: white;
-        }
 
-        /* Utilidad para ocultar scrollbar en carrusel si fuera necesario */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .md\:h-14{
-            height: 5rem!important;
-        }
-    </style>
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Orbitron', 'sans-serif'],
+                    },
                     colors: {
-                        neutral: {
-                            950: '#0a0a0a',
-                            900: '#171717',
-                            800: '#262626',
-                        },
-                        red: {
-                            500: '#ef4444',
-                            600: '#dc2626',
-                            700: '#b91c1c',
-                            800: '#991b1b',
-                            900: '#7f1d1d',
-                            950: '#450a0a',
+                        ink: '#05060a',
+                        panel: '#0b0d14',
+                        neon: {
+                            cyan: '#22d3ee',
+                            magenta: '#d946ef',
+                            red: '#ff2a4d',
+                            purple: '#a855f7',
                         }
                     }
                 }
             }
         }
     </script>
+
+    <style>
+        :root{
+            --cyan:#22d3ee; --magenta:#d946ef; --red:#ff2a4d; --purple:#a855f7;
+        }
+        html,body{ background:#05060a; }
+        body{
+            font-family:'Inter',sans-serif;
+            color:#d6d8e0;
+            overflow-x:hidden;
+            cursor:default;
+        }
+        ::selection{ background:rgba(217,70,239,.35); color:#fff; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar{ width:10px; }
+        ::-webkit-scrollbar-track{ background:#05060a; }
+        ::-webkit-scrollbar-thumb{ background:linear-gradient(#22d3ee,#d946ef,#ff2a4d); border-radius:10px; }
+
+        .no-scrollbar::-webkit-scrollbar{ display:none; }
+        .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+
+        /* ---------- Animated background ---------- */
+        .grid-bg{
+            position:fixed; inset:0; z-index:0; pointer-events:none;
+            background-image:
+                linear-gradient(rgba(34,211,238,.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(217,70,239,.06) 1px, transparent 1px);
+            background-size:48px 48px;
+            mask-image:radial-gradient(circle at 50% 30%, #000 0%, transparent 75%);
+            -webkit-mask-image:radial-gradient(circle at 50% 30%, #000 0%, transparent 75%);
+            animation:gridmove 18s linear infinite;
+        }
+        @keyframes gridmove{ from{ background-position:0 0,0 0; } to{ background-position:48px 48px,48px 48px; } }
+
+        #spotlight{
+            position:fixed; inset:0; z-index:0; pointer-events:none;
+            background:radial-gradient(420px circle at var(--mx,50%) var(--my,15%), rgba(168,85,247,.10), transparent 60%);
+            transition:background .15s ease;
+        }
+        #particles{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+        .orb{ position:absolute; border-radius:9999px; filter:blur(70px); opacity:.5; }
+
+        /* ---------- Neon text / gradients ---------- */
+        .text-grad{
+            background:linear-gradient(90deg,var(--cyan),var(--magenta),var(--red));
+            -webkit-background-clip:text; background-clip:text; color:transparent;
+        }
+        .neon-glow{ text-shadow:0 0 16px rgba(217,70,239,.55), 0 0 40px rgba(34,211,238,.25); }
+
+        /* Glitch hero title */
+        .glitch{ position:relative; }
+        .glitch::before,.glitch::after{
+            content:attr(data-text); position:absolute; inset:0;
+            background:#05060a; -webkit-background-clip:border-box; background-clip:border-box; clip-path:inset(0 0 0 0);
+        }
+        .glitch::before{ color:var(--cyan); transform:translate(-2px,0); animation:glx 3.2s infinite linear alternate-reverse; mix-blend-mode:screen; }
+        .glitch::after{ color:var(--red); transform:translate(2px,0); animation:glx 2.4s infinite linear alternate-reverse; mix-blend-mode:screen; }
+        @keyframes glx{
+            0%{ clip-path:inset(0 0 85% 0);} 20%{ clip-path:inset(60% 0 20% 0);}
+            40%{ clip-path:inset(30% 0 55% 0);} 60%{ clip-path:inset(80% 0 5% 0);}
+            80%{ clip-path:inset(10% 0 75% 0);} 100%{ clip-path:inset(45% 0 35% 0);}
+        }
+
+        /* Gradient border cards */
+        .card-neon{ position:relative; background:#0b0d14; border:1px solid rgba(255,255,255,.06); }
+        .card-neon::before{
+            content:""; position:absolute; inset:0; padding:1px; border-radius:inherit; pointer-events:none;
+            background:linear-gradient(135deg,var(--cyan),var(--magenta),var(--red));
+            -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+            mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+            -webkit-mask-composite:xor; mask-composite:exclude;
+            opacity:0; transition:opacity .35s ease;
+        }
+        .card-neon:hover::before{ opacity:1; }
+        .card-neon:hover{ box-shadow:0 0 30px rgba(217,70,239,.18); }
+
+        /* Buttons */
+        .btn-neon{ position:relative; overflow:hidden; transition:all .3s ease; }
+        .btn-neon::after{
+            content:""; position:absolute; inset:0; pointer-events:none;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+            transform:translateX(-120%); transition:transform .6s ease;
+        }
+        .btn-neon:hover::after{ transform:translateX(120%); }
+
+        /* Reveal on scroll */
+        .reveal{ opacity:0; transform:translateY(34px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+        .reveal.in{ opacity:1; transform:none; }
+
+        /* Nav link underline */
+        .nav-link{ position:relative; }
+        .nav-link::after{
+            content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0;
+            background:linear-gradient(90deg,var(--cyan),var(--magenta),var(--red));
+            transition:width .3s ease;
+        }
+        .nav-link:hover::after{ width:100%; }
+
+        /* Marquee */
+        .marquee{ display:flex; gap:3rem; width:max-content; animation:scrollx 26s linear infinite; }
+        @keyframes scrollx{ to{ transform:translateX(-50%); } }
+
+        /* Skill bar shimmer */
+        .bar-fill{ background:linear-gradient(90deg,var(--cyan),var(--magenta),var(--red)); width:0; transition:width 1.4s cubic-bezier(.16,1,.3,1); }
+
+        .scanline{ background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px); }
+
+        @media (prefers-reduced-motion: reduce){
+            *{ animation:none!important; transition:none!important; }
+            .reveal{ opacity:1; transform:none; }
+        }
+    </style>
 </head>
-<body class="overflow-x-hidden">
+<body class="relative">
+
+    <!-- Animated backgrounds -->
+    <div class="grid-bg"></div>
+    <canvas id="particles"></canvas>
+    <div id="spotlight"></div>
+    <div class="orb" style="top:-6rem;left:-6rem;width:26rem;height:26rem;background:#22d3ee33;"></div>
+    <div class="orb" style="top:30%;right:-8rem;width:30rem;height:30rem;background:#d946ef2e;"></div>
+    <div class="orb" style="bottom:-8rem;left:20%;width:28rem;height:28rem;background:#ff2a4d26;"></div>
 
     <!-- Navbar -->
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent">
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-5 bg-transparent">
         <div class="container mx-auto px-6 flex justify-between items-center">
-            
-            <!-- IMPLEMENTACIÓN DEL LOGO EN NAVBAR (SOLO IMAGEN) -->
             <a href="#home" class="flex items-center gap-3 group">
-                <!-- Ajuste de tamaño del logo: h-12 (48px) en móvil, md:h-14 (56px) en escritorio. 
-                     Lo hice un pelín más grande ya que ahora está solo. -->
-                <img src="/izofer.svg" alt="IZOFER Logo" class="h-24 md:h-24 w-auto object-contain group-hover:opacity-80 transition-opacity">
+                <img src="izofer.svg" alt="IZOFER" class="h-12 md:h-14 w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-[0_0_12px_rgba(217,70,239,.45)]">
             </a>
-            
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
-                <a href="#home" class="hover:text-red-500 transition-colors uppercase">Inicio</a>
-                <a href="#biografia" class="hover:text-red-500 transition-colors uppercase">Biografía</a>
-                <a href="#habilidades" class="hover:text-red-500 transition-colors uppercase">Habilidades</a>
-                <a href="#proyectos" class="hover:text-red-500 transition-colors uppercase">Proyectos</a>
-                <a href="#contacto" class="hover:text-red-500 transition-colors uppercase">Contacto</a>
+
+            <div class="hidden md:flex items-center space-x-9 text-sm font-medium tracking-wide">
+                <a href="#home" class="nav-link hover:text-white text-neutral-300 transition-colors uppercase">Inicio</a>
+                <a href="#biografia" class="nav-link hover:text-white text-neutral-300 transition-colors uppercase">Biografía</a>
+                <a href="#habilidades" class="nav-link hover:text-white text-neutral-300 transition-colors uppercase">Habilidades</a>
+                <a href="#proyectos" class="nav-link hover:text-white text-neutral-300 transition-colors uppercase">Proyectos</a>
+                <a href="#contacto" class="px-5 py-2 rounded-full font-semibold text-white bg-gradient-to-r from-neon-cyan/20 via-neon-magenta/20 to-neon-red/20 border border-neon-magenta/40 hover:border-neon-magenta hover:shadow-[0_0_18px_rgba(217,70,239,.5)] transition-all uppercase">Contacto</a>
             </div>
 
-            <!-- Mobile Menu Icon -->
-            <div class="md:hidden text-red-500">
-                <i data-lucide="terminal" class="w-6 h-6"></i>
-            </div>
+            <button id="menuBtn" class="md:hidden text-neon-cyan" aria-label="Menú">
+                <i data-lucide="menu" class="w-7 h-7"></i>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden hidden mx-6 mt-3 rounded-xl border border-neon-magenta/30 bg-panel/95 backdrop-blur-lg overflow-hidden">
+            <a href="#home" class="block px-6 py-4 border-b border-white/5 hover:bg-white/5 uppercase text-sm tracking-wide">Inicio</a>
+            <a href="#biografia" class="block px-6 py-4 border-b border-white/5 hover:bg-white/5 uppercase text-sm tracking-wide">Biografía</a>
+            <a href="#habilidades" class="block px-6 py-4 border-b border-white/5 hover:bg-white/5 uppercase text-sm tracking-wide">Habilidades</a>
+            <a href="#proyectos" class="block px-6 py-4 border-b border-white/5 hover:bg-white/5 uppercase text-sm tracking-wide">Proyectos</a>
+            <a href="#contacto" class="block px-6 py-4 hover:bg-white/5 uppercase text-sm tracking-wide text-neon-cyan">Contacto</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background Gradients -->
-        <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1),transparent_50%)]"></div>
-        <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-red-900/10 rounded-full blur-3xl"></div>
-        
+    <!-- Hero -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden z-10">
         <div class="container mx-auto px-6 relative z-10 text-center">
-            <div class="inline-block mb-4 px-3 py-1 border border-red-900/50 rounded-full bg-red-950/20 backdrop-blur-sm">
-                <span class="text-red-500 text-xs font-bold tracking-widest uppercase">Disponible para proyectos de alto impacto</span>
+            <div class="reveal in inline-flex items-center gap-2 mb-7 px-4 py-1.5 rounded-full border border-neon-cyan/40 bg-neon-cyan/5 backdrop-blur-sm">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-neon-cyan"></span>
+                </span>
+                <span class="text-neon-cyan text-xs font-bold tracking-[0.2em] uppercase">Disponible para proyectos de alto impacto</span>
             </div>
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tight leading-none">
-                CÓDIGO <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800">MAESTRO</span>
+
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tight leading-[0.95]">
+                CÓDIGO
+                <span class="glitch text-grad neon-glow inline-block" data-text="MAESTRO">MAESTRO</span>
             </h1>
-            <p class="text-xl md:text-2xl text-neutral-400 max-w-2xl mx-auto mb-10 font-light">
-                Desarrollo de Software. Inteligencia Artificial. <span class="text-white font-medium">Dominio Digital.</span>
+
+            <p class="text-lg md:text-2xl text-neutral-400 max-w-2xl mx-auto mb-3 font-light min-h-[2.2em]">
+                <span id="typed" class="font-mono"></span><span class="text-neon-cyan animate-pulse">_</span>
             </p>
+            <p class="text-neutral-500 max-w-xl mx-auto mb-10">Sistemas robustos. IA aplicada. <span class="text-white font-medium">Dominio digital.</span></p>
+
             <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="#proyectos" class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 border border-red-500 font-bold transition-all hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] flex items-center justify-center">
-                    VER ARSENAL
+                <a href="#proyectos" class="btn-neon group bg-gradient-to-r from-neon-magenta to-neon-red text-white px-8 py-4 font-bold rounded-lg shadow-[0_0_25px_rgba(217,70,239,.4)] hover:shadow-[0_0_40px_rgba(255,42,77,.6)] flex items-center justify-center gap-2 uppercase tracking-wide">
+                    Ver Arsenal <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                 </a>
-                <a href="#contacto" class="bg-transparent hover:bg-neutral-900 text-white px-8 py-4 border border-neutral-700 font-medium transition-all flex items-center justify-center">
-                    CONTACTAR
+                <a href="#contacto" class="btn-neon bg-white/5 backdrop-blur-sm text-white px-8 py-4 border border-white/15 hover:border-neon-cyan font-medium rounded-lg transition-all flex items-center justify-center gap-2 uppercase tracking-wide">
+                    Contactar <i data-lucide="terminal" class="w-4 h-4"></i>
                 </a>
             </div>
         </div>
 
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-red-600">
+        <a href="#biografia" class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-neon-magenta z-10">
             <i data-lucide="chevron-down" class="w-8 h-8"></i>
-        </div>
+        </a>
     </section>
 
-    <!-- Biography Section -->
-    <section id="biografia" class="py-24 bg-neutral-950 relative border-t border-neutral-900">
+    <!-- Tech marquee -->
+    <div class="relative z-10 border-y border-white/5 bg-panel/40 backdrop-blur-sm py-4 overflow-hidden">
+        <div class="marquee text-neutral-600 font-mono text-sm uppercase tracking-widest">
+            <div class="flex gap-12 pr-12" id="marquee-a"></div>
+            <div class="flex gap-12 pr-12" id="marquee-b"></div>
+        </div>
+    </div>
+
+    <!-- Biography -->
+    <section id="biografia" class="relative z-10 py-28">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="order-2 md:order-1 relative">
-                    <div class="absolute -inset-4 bg-gradient-to-r from-red-600 to-black opacity-20 blur-lg rounded-xl"></div>
-                    <div class="relative bg-neutral-900 border border-neutral-800 p-8 rounded-xl shadow-2xl">
-                        <i data-lucide="brain" class="text-red-500 mb-6 w-12 h-12"></i>
-                        <h3 class="text-2xl font-bold text-white mb-4">La Mente detrás del Código</h3>
-                        <ul class="space-y-4 text-neutral-400">
-                            <li class="flex items-center gap-3">
-                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-                                <span>Edad: 36 años</span>
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-                                <span>Ubicación: Bogotá, Colombia</span>
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-                                <span>Enfoque: Full Stack & AI Strategy</span>
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-                                <span>Intereses: Psicología, Estrategia, Finanzas</span>
-                            </li>
+                <div class="order-2 md:order-1 reveal">
+                    <div class="card-neon rounded-2xl p-8 scanline">
+                        <i data-lucide="cpu" class="text-neon-cyan mb-6 w-12 h-12 drop-shadow-[0_0_12px_rgba(34,211,238,.6)]"></i>
+                        <h3 class="text-2xl font-bold text-white mb-6">La mente detrás del código</h3>
+                        <ul class="space-y-4 text-neutral-400 font-mono text-sm">
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-neon-cyan shadow-[0_0_8px_var(--cyan)]"></span><span class="text-neutral-500">edad:</span> <span id="age"></span> años</li>
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-neon-magenta shadow-[0_0_8px_var(--magenta)]"></span><span class="text-neutral-500">ubicación:</span> Bogotá, Colombia</li>
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-neon-red shadow-[0_0_8px_var(--red)]"></span><span class="text-neutral-500">enfoque:</span> Full Stack & AI Strategy</li>
+                            <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-neon-purple shadow-[0_0_8px_var(--purple)]"></span><span class="text-neutral-500">intereses:</span> Psicología, Estrategia, Finanzas</li>
                         </ul>
+
+                        <div class="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-white/5">
+                            <div><div class="text-3xl font-display font-black text-grad" data-count="10">0</div><div class="text-[11px] text-neutral-500 uppercase tracking-wider mt-1">Años exp.</div></div>
+                            <div><div class="text-3xl font-display font-black text-grad" data-count="50">0</div><div class="text-[11px] text-neutral-500 uppercase tracking-wider mt-1">Proyectos</div></div>
+                            <div><div class="text-3xl font-display font-black text-grad" data-count="100" data-suffix="%">0</div><div class="text-[11px] text-neutral-500 uppercase tracking-wider mt-1">Entrega</div></div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="order-1 md:order-2">
-                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-8">
-                        Sobre <span class="text-red-600">Mí</span>
+
+                <div class="order-1 md:order-2 reveal">
+                    <span class="font-mono text-neon-cyan text-sm tracking-widest uppercase">// sobre mí</span>
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-white mt-3 mb-8">
+                        Más que código, <span class="text-grad">construyo sistemas</span>
                     </h2>
                     <p class="text-lg text-neutral-400 leading-relaxed mb-6">
-                        Más que código, construyo sistemas. Con 36 años y una base sólida en Colombia, fusiono la lógica estricta del backend con la creatividad del desarrollo de videojuegos. Mi enfoque no es solo técnico; aplico principios de psicología y estrategia para crear software que no solo funcione, sino que domine su mercado. Mi meta es clara: transformar líneas de código en activos de alto valor.
+                        Con <span id="age-text"></span> años y una base sólida forjada en Colombia, fusiono la lógica estricta del backend con la creatividad del desarrollo de videojuegos. Mi enfoque no es solo técnico: aplico principios de psicología y estrategia para crear software que no solo funcione, sino que <span class="text-white font-medium">domine su mercado</span>.
                     </p>
                     <p class="text-lg text-neutral-400 leading-relaxed">
-                        Mi trayectoria en el desarrollo de software (PHP, Java, C#) es solo la base. 
-                        Estoy obsesionado con la escalabilidad y la eficiencia. No busco simplemente "hacer funcionar" las cosas; 
-                        busco crear sistemas robustos que sean la piedra angular de negocios ambiciosos.
+                        Mi trayectoria en PHP, Java y C# es apenas la base. Estoy obsesionado con la escalabilidad y la eficiencia. No busco simplemente "hacer funcionar" las cosas: construyo sistemas robustos que se convierten en la piedra angular de negocios ambiciosos.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Skills Section -->
-    <section id="habilidades" class="py-24 bg-neutral-900 relative">
+    <!-- Skills -->
+    <section id="habilidades" class="relative z-10 py-28">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
-                    Nivel <span class="text-red-600">Técnico</span>
-                </h2>
-                <p class="text-neutral-400 max-w-xl mx-auto">
-                    Un despliegue de mis capacidades actuales y dominio sobre las herramientas de creación digital.
-                </p>
+            <div class="text-center mb-16 reveal">
+                <span class="font-mono text-neon-magenta text-sm tracking-widest uppercase">// stack técnico</span>
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-white mt-3 mb-4">Nivel <span class="text-grad">Técnico</span></h2>
+                <p class="text-neutral-400 max-w-xl mx-auto">Un despliegue de mis capacidades y dominio sobre las herramientas de creación digital.</p>
             </div>
-
-            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Skills will be injected via JS -->
-            </div>
+            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
         </div>
     </section>
 
-    <!-- Projects Section (Carousel) -->
-    <section id="proyectos" class="py-24 bg-neutral-950 border-t border-neutral-900 overflow-hidden">
+    <!-- Projects -->
+    <section id="proyectos" class="relative z-10 py-28 overflow-hidden">
         <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
                 <div>
-                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
-                        Proyectos <span class="text-red-600">Realizados</span>
-                    </h2>
-                    <p class="text-neutral-400">Selección de trabajos de alto calibre.</p>
+                    <span class="font-mono text-neon-red text-sm tracking-widest uppercase">// portafolio</span>
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-white mt-3 mb-4">Proyectos <span class="text-grad">Realizados</span></h2>
+                    <p class="text-neutral-400">Una selección de trabajos de alto calibre.</p>
                 </div>
-                
                 <div class="flex items-center gap-4 mt-6 md:mt-0">
-                    <!-- Carousel Controls -->
-                    <button id="prevBtn" class="p-3 border border-neutral-700 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all active:scale-95 text-neutral-400">
+                    <button id="prevBtn" class="p-3 rounded-lg border border-white/15 hover:border-neon-cyan hover:text-neon-cyan transition-all active:scale-95 text-neutral-400">
                         <i data-lucide="chevron-left" class="w-6 h-6"></i>
                     </button>
-                    <button id="nextBtn" class="p-3 border border-neutral-700 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all active:scale-95 text-neutral-400">
+                    <button id="nextBtn" class="p-3 rounded-lg border border-white/15 hover:border-neon-magenta hover:text-neon-magenta transition-all active:scale-95 text-neutral-400">
                         <i data-lucide="chevron-right" class="w-6 h-6"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Carousel Window -->
-            <div class="relative overflow-hidden -mx-4 px-4">
-                <div id="carousel-track" class="flex transition-transform duration-500 ease-in-out w-full">
-                    <!-- Projects injected via JS -->
-                </div>
+            <div class="relative overflow-hidden -mx-4 px-4 reveal">
+                <div id="carousel-track" class="flex transition-transform duration-500 ease-in-out w-full"></div>
             </div>
-            
-            <!-- Progress Indicators -->
-            <div id="carousel-indicators" class="flex justify-center mt-10 gap-2">
-                <!-- Indicators injected via JS -->
-            </div>
+
+            <div id="carousel-indicators" class="flex justify-center mt-10 gap-2"></div>
         </div>
     </section>
 
-    <!-- CTA / Contact Section -->
-    <section id="contacto" class="py-24 relative overflow-hidden">
-        <div class="absolute inset-0 bg-neutral-900">
-            <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-red-900/10 to-transparent"></div>
-        </div>
-
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="max-w-4xl mx-auto bg-black border border-neutral-800 p-8 md:p-12 shadow-2xl rounded-sm">
+    <!-- Contact -->
+    <section id="contacto" class="relative z-10 py-28">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto card-neon rounded-2xl p-8 md:p-12 reveal scanline">
                 <div class="text-center mb-10">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Iniciemos el Protocolo</h2>
-                    <p class="text-neutral-400">
-                        Si buscas resultados ordinarios, busca a otro. Si quieres construir el futuro, envíame un mensaje.
-                    </p>
+                    <span class="font-mono text-neon-cyan text-sm tracking-widest uppercase">// init contacto</span>
+                    <h2 class="font-display text-3xl md:text-4xl font-bold text-white mt-3 mb-4">Iniciemos el <span class="text-grad">Protocolo</span></h2>
+                    <p class="text-neutral-400 max-w-xl mx-auto">Si buscas resultados ordinarios, busca a otro. Si quieres construir el futuro, envíame un mensaje.</p>
                 </div>
 
-                <form class="space-y-6" onsubmit="event.preventDefault(); alert('Protocolo de transmisión iniciado. Mensaje (simulado) enviado.');">
+                <form class="space-y-6">
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="text-sm font-medium text-red-500 ml-1">NOMBRE</label>
-                            <input type="text" name="nombre" id="nombre" class="w-full bg-neutral-900 border border-neutral-800 text-white px-4 py-3 focus:outline-none focus:border-red-600 transition-colors placeholder-neutral-600" placeholder="Tu nombre o empresa">
+                            <label class="text-xs font-mono font-semibold text-neon-cyan ml-1 tracking-widest uppercase">Nombre</label>
+                            <input type="text" name="nombre" id="nombre" required class="w-full bg-black/40 border border-white/10 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-neon-cyan focus:shadow-[0_0_18px_rgba(34,211,238,.25)] transition-all placeholder-neutral-600" placeholder="Tu nombre o empresa">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-medium text-red-500 ml-1">CORREO</label>
-                            <input type="email" name="correo" id="correo" class="w-full bg-neutral-900 border border-neutral-800 text-white px-4 py-3 focus:outline-none focus:border-red-600 transition-colors placeholder-neutral-600" placeholder="correo@ejemplo.com">
+                            <label class="text-xs font-mono font-semibold text-neon-magenta ml-1 tracking-widest uppercase">Correo</label>
+                            <input type="email" name="correo" id="correo" required class="w-full bg-black/40 border border-white/10 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-neon-magenta focus:shadow-[0_0_18px_rgba(217,70,239,.25)] transition-all placeholder-neutral-600" placeholder="correo@ejemplo.com">
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <label class="text-sm font-medium text-red-500 ml-1">MENSAJE</label>
-                        <textarea rows="4"  name="mensaje" id="mensaje" class="w-full bg-neutral-900 border border-neutral-800 text-white px-4 py-3 focus:outline-none focus:border-red-600 transition-colors placeholder-neutral-600" placeholder="Describe tu visión..."></textarea>
+                        <label class="text-xs font-mono font-semibold text-neon-red ml-1 tracking-widest uppercase">Mensaje</label>
+                        <textarea rows="4" name="mensaje" id="mensaje" required class="w-full bg-black/40 border border-white/10 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-neon-red focus:shadow-[0_0_18px_rgba(255,42,77,.25)] transition-all placeholder-neutral-600" placeholder="Describe tu visión..."></textarea>
                     </div>
-                    <button class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 text-white font-bold py-4 tracking-widest flex items-center justify-center gap-2 group transition-all">
-                        ENVIAR TRANSMISIÓN <i data-lucide="send" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    <button type="submit" class="btn-neon w-full bg-gradient-to-r from-neon-cyan via-neon-magenta to-neon-red text-white font-bold py-4 rounded-lg tracking-widest flex items-center justify-center gap-2 group shadow-[0_0_25px_rgba(217,70,239,.35)] hover:shadow-[0_0_45px_rgba(217,70,239,.6)] transition-all uppercase">
+                        Enviar Transmisión <i data-lucide="send" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </button>
                 </form>
             </div>
@@ -263,85 +352,80 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-black py-8 border-t border-neutral-900">
-        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-            
-            <!-- IMPLEMENTACIÓN DEL LOGO EN FOOTER (SOLO IMAGEN Y COPYRIGHT) -->
-            <div class="mb-4 md:mb-0 flex items-center gap-2">
-                <!-- Logo pequeño -->
-                <img src="/izofer.svg" alt="IZOFER Logo" class="h-8 w-auto object-contain opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
-                <div>
-                    <!-- Nombre eliminado, solo queda el copyright -->
-                    <p class="text-neutral-500 text-xs mt-1">© 2024 Todos los derechos reservados.</p>
-                </div>
+    <footer class="relative z-10 border-t border-white/5 bg-panel/40 backdrop-blur-sm py-10">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <img src="izofer.svg" alt="IZOFER" class="h-7 w-auto object-contain opacity-70 hover:opacity-100 transition-all">
+                <p class="text-neutral-500 text-xs font-mono">© <span id="year"></span> IZOFER · Todos los derechos reservados.</p>
             </div>
-            
-            <div class="flex gap-6">
-                <a href="#" class="text-neutral-500 hover:text-red-500 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
-                <a href="#" class="text-neutral-500 hover:text-red-500 transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
-                <a href="#" class="text-neutral-500 hover:text-red-500 transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></a>
+            <div class="flex gap-3">
+                <a id="lnk-linkedin" href="#" target="_blank" rel="noopener" aria-label="LinkedIn" class="p-2.5 rounded-lg border border-white/10 text-neutral-400 hover:text-neon-cyan hover:border-neon-cyan hover:shadow-[0_0_14px_rgba(34,211,238,.4)] transition-all"><svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+                <a id="lnk-github" href="#" target="_blank" rel="noopener" aria-label="GitHub" class="p-2.5 rounded-lg border border-white/10 text-neutral-400 hover:text-neon-magenta hover:border-neon-magenta hover:shadow-[0_0_14px_rgba(217,70,239,.4)] transition-all"><svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.21 3.44 9.63 8.21 11.19.6.11.82-.25.82-.56v-2.1c-3.34.71-4.04-1.58-4.04-1.58-.55-1.36-1.34-1.72-1.34-1.72-1.09-.73.08-.72.08-.72 1.2.08 1.83 1.21 1.83 1.21 1.07 1.79 2.81 1.27 3.5.97.11-.76.42-1.27.76-1.56-2.67-.3-5.47-1.3-5.47-5.79 0-1.28.47-2.32 1.24-3.14-.12-.3-.54-1.52.12-3.16 0 0 1.01-.32 3.3 1.2.96-.26 1.98-.39 3-.4 1.02.01 2.04.14 3 .4 2.29-1.52 3.3-1.2 3.3-1.2.66 1.64.24 2.86.12 3.16.77.82 1.24 1.86 1.24 3.14 0 4.5-2.81 5.48-5.5 5.78.43.36.82 1.08.82 2.18v3.23c0 .31.21.68.82.56C20.56 21.91 24 17.5 24 12.29 24 5.78 18.63.5 12 .5z"/></svg></a>
+                <a href="#contacto" aria-label="Contacto" class="p-2.5 rounded-lg border border-white/10 text-neutral-400 hover:text-neon-red hover:border-neon-red hover:shadow-[0_0_14px_rgba(255,42,77,.4)] transition-all"><i data-lucide="message-square" class="w-5 h-5"></i></a>
             </div>
         </div>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- ============ LOGIC ============ -->
     <script>
-        // Data Configuration
+        /* ---- Social links (edita con tus URLs reales) ---- */
+        const SOCIALS = {
+            linkedin: 'https://www.linkedin.com/feed/',
+            github:   'https://github.com/izofer'
+        };
+
         const skillsData = [
-            { name: "PHP", level: 100, icon: "terminal", category: "Backend" },
-            { name: "Laravel", level: 100, icon: "code", category: "Backend" },
-            { name: "JavaScript", level: 100, icon: "code", category: "Frontend" },
-            { name: "HTML/CSS", level: 100, icon: "code", category: "Frontend" },
-            { name: "MySQL", level: 75, icon: "database", category: "Database" },
-            { name: "Java", level: 70, icon: "code", category: "Backend" },
-            { name: "C# / Unity", level: 60, icon: "gamepad-2", category: "Game Dev" },
-            { name: "MongoDB", level: 40, icon: "database", category: "Database" },
+            { name: "PHP", level: 100, icon: "terminal", category: "Backend", color:"var(--magenta)" },
+            { name: "Laravel", level: 100, icon: "flame", category: "Backend", color:"var(--red)" },
+            { name: "JavaScript", level: 100, icon: "braces", category: "Frontend", color:"var(--cyan)" },
+            { name: "HTML / CSS", level: 100, icon: "code-2", category: "Frontend", color:"var(--cyan)" },
+            { name: "MySQL", level: 75, icon: "database", category: "Database", color:"var(--purple)" },
+            { name: "Java", level: 70, icon: "coffee", category: "Backend", color:"var(--magenta)" },
+            { name: "C# / Unity", level: 60, icon: "gamepad-2", category: "Game Dev", color:"var(--red)" },
+            { name: "MongoDB", level: 40, icon: "leaf", category: "Database", color:"var(--purple)" },
         ];
 
         const projectsData = [
             {
+                title: "CAOTICOIN",
+                desc: "Salón arcade online: plataforma de videojuegos donde juegas con monedas. Un salón recreativo caótico y retro, directo desde el navegador.",
+                tags: ["REACT", "LARAVEL", "JAVASCRIPT", "GAMING"],
+                url: 'https://caoticoin.com',
+                type: "Salón Arcade Online",
+                icon: "gamepad-2"
+            },
+            {
+                title: "MUTANT MIVA EDITOR",
+                desc: "Extensión de Chrome que transforma el textarea heredado de Miva Merchant en un potente editor CodeMirror con tema oscuro. Adiós al editor básico: escribe HTML, CSS, JS y Miva Script (mvt) con resaltado de sintaxis y una experiencia moderna y fluida.",
+                tags: ["CHROME", "CODEMIRROR", "JAVASCRIPT", "MIVA"],
+                url: 'https://chromewebstore.google.com/detail/mutant-miva-editor-by-izo/jajekmmbkfnjejmkcpjlemofobgepdfp?authuser=0&hl=es-419',
+                type: "Extensión de Chrome",
+                icon: "puzzle"
+            },
+            {
                 title: "VOICE DISTORTER",
-                desc: "Distorsionador de voz con múltiples efectos, tambien puedes personalizar. Ideal para streamers y creadores de contenido o video juegos.",
+                desc: "Distorsionador de voz con múltiples efectos personalizables. Ideal para streamers, creadores de contenido y videojuegos.",
                 tags: ["PYTHON", "JAVASCRIPT", "HTML", "CSS"],
-                url:'https://izofer-voice-distorter.kraqr1.easypanel.host/',
-                type: "USO PUBLICO"
+                url: 'https://izofer-voice-distorter.kraqr1.easypanel.host/',
+                type: "Uso Público",
+                icon: "mic"
             },
             {
-                title: "VET ASSISTANT",
-                desc: "Gestor de clínicas veterinarias con agente. Automatiza citas, historiales médicos y recordatorios.",
-                tags: ["LARAVEL","MARIADB", "JAVASCRIPT", "HTML", "CSS"],
-                url:'https://vet-assistant-front.izofer.com/login.html',
-                type: "Agentes n8n"
-            },
-
-            {
-                title: "LACUNA THE FORGE OF EVIL",
-                desc: "Video de suspenso, misterio y magia en 2d metroidvania, donde tu eres eres la villana.",
-                tags: ["Unity", "C#", "IA Art", "METROIDVANIA"],
-                url:'https://izofer.itch.io/lacuna-the-forge-of-evil',
-                type: "Videojuego"
-            },
-            {
-                title: "Quantum Ledger",
-                desc: "Aplicación financiera descentralizada (DeFi). Contratos inteligentes seguros y análisis de mercado en tiempo real.",
-                tags: ["Solidity", "Web3.js", "React", "Node.js"],
-                url:'',
-                type: "Fintech / Blockchain"
-            },
-            {
-                title: "Cyber Sentinel",
-                desc: "Herramienta de monitoreo de red y detección de intrusiones. Enfocada en la seguridad ofensiva y defensiva.",
-                tags: ["Python", "Bash", "Linux", "Networking"],
-                url:'',
-                type: "Ciberseguridad"
+                title: "LACUNA: THE FORGE OF EVIL",
+                desc: "Metroidvania 2D de suspenso, misterio y magia donde tú eres la villana. Atmósfera oscura y arte generado con IA.",
+                tags: ["UNITY", "C#", "IA ART", "METROIDVANIA"],
+                url: 'https://izofer.itch.io/lacuna-the-forge-of-evil',
+                type: "Videojuego",
+                icon: "swords"
             }
         ];
 
-        // State
+        const techStack = ["PHP","Laravel","React","JavaScript","Python","Unity / C#","Java","MySQL","MongoDB","HTML5","CSS3","n8n","IA / LLM","Chrome Ext."];
+
+        /* ---- State ---- */
         let currentProjectIndex = 0;
         let itemsPerPage = 3;
 
-        // DOM Elements
         const navbar = document.getElementById('navbar');
         const skillsContainer = document.getElementById('skills-container');
         const carouselTrack = document.getElementById('carousel-track');
@@ -349,163 +433,234 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
-        // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
+            setAge();
+            applySocials();
+            renderMarquee();
             renderSkills();
-            handleResize(); // Set initial itemsPerPage
+            handleResize();
             renderProjects();
             updateCarousel();
-            lucide.createIcons(); // Initialize Icons
+            initReveal();
+            initTyping();
+            lucide.createIcons();
         });
 
-        // --- Scroll Effect ---
+        function setAge(){
+            const birth = new Date(1989, 5, 29); // 29 de junio de 1989 (mes 0-indexado)
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            const m = today.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+            document.querySelectorAll('#age, #age-text').forEach(el => el.textContent = age);
+        }
+
+        function applySocials(){
+            document.getElementById('lnk-linkedin').href = SOCIALS.linkedin;
+            document.getElementById('lnk-github').href = SOCIALS.github;
+        }
+
+        /* ---- Navbar scroll ---- */
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('bg-neutral-950/90', 'backdrop-blur-md', 'border-b', 'border-red-900/30', 'py-4');
-                navbar.classList.remove('bg-transparent', 'py-6');
+            if (window.scrollY > 40) {
+                navbar.classList.add('bg-ink/80','backdrop-blur-md','border-b','border-neon-magenta/20','py-3');
+                navbar.classList.remove('bg-transparent','py-5');
             } else {
-                navbar.classList.remove('bg-neutral-950/90', 'backdrop-blur-md', 'border-b', 'border-red-900/30', 'py-4');
-                navbar.classList.add('bg-transparent', 'py-6');
+                navbar.classList.remove('bg-ink/80','backdrop-blur-md','border-b','border-neon-magenta/20','py-3');
+                navbar.classList.add('bg-transparent','py-5');
             }
         });
 
-        // --- Render Skills ---
-        function renderSkills() {
+        /* ---- Mobile menu ---- */
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        /* ---- Marquee ---- */
+        function renderMarquee(){
+            const html = techStack.map(t => `<span class="flex items-center gap-3">${t}<span class="text-neon-magenta">/</span></span>`).join('');
+            document.getElementById('marquee-a').innerHTML = html;
+            document.getElementById('marquee-b').innerHTML = html;
+        }
+
+        /* ---- Typing effect ---- */
+        function initTyping(){
+            const phrases = ["Desarrollo de Software.", "Inteligencia Artificial.", "Extensiones para Chrome.", "Videojuegos & Estrategia.", "Sistemas que dominan."];
+            const el = document.getElementById('typed');
+            let p = 0, c = 0, deleting = false;
+            function tick(){
+                const word = phrases[p];
+                el.textContent = deleting ? word.substring(0, c--) : word.substring(0, c++);
+                if (!deleting && c === word.length + 1){ deleting = true; setTimeout(tick, 1500); return; }
+                if (deleting && c === 0){ deleting = false; p = (p+1) % phrases.length; }
+                setTimeout(tick, deleting ? 40 : 75);
+            }
+            tick();
+        }
+
+        /* ---- Skills ---- */
+        function renderSkills(){
             skillsContainer.innerHTML = skillsData.map(skill => `
-                <div class="group bg-neutral-950 border border-neutral-800 p-6 hover:border-red-600/50 transition-all duration-300 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-red-600">
-                        <i data-lucide="${skill.icon}" class="w-5 h-5"></i>
+                <div class="card-neon group rounded-xl p-6 relative overflow-hidden reveal">
+                    <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-60 transition-opacity" style="color:${skill.color}">
+                        <i data-lucide="${skill.icon}" class="w-6 h-6"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-1">${skill.name}</h3>
-                    <span class="text-xs text-red-500 uppercase tracking-widest font-semibold">${skill.category}</span>
+                    <span class="text-xs uppercase tracking-widest font-mono font-semibold" style="color:${skill.color}">${skill.category}</span>
                     <div class="mt-6">
                         <div class="flex justify-between text-sm text-neutral-400 mb-2">
-                            <span>Dominio</span>
+                            <span class="font-mono text-xs">dominio</span>
                             <span class="text-white font-mono">${skill.level}%</span>
                         </div>
-                        <div class="w-full bg-neutral-800 h-2 rounded-full overflow-hidden">
-                            <div class="bg-red-600 h-full rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)] transition-all duration-1000 ease-out" style="width: ${skill.level}%"></div>
+                        <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                            <div class="bar-fill h-full rounded-full" data-level="${skill.level}"></div>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // --- Carousel Logic ---
-        function handleResize() {
-            if (window.innerWidth < 768) {
-                itemsPerPage = 1;
-            } else if (window.innerWidth < 1024) {
-                itemsPerPage = 2;
-            } else {
-                itemsPerPage = 3;
-            }
-            updateCarousel();
-            renderIndicators(); // Re-render indicators as page count might change
+        /* ---- Reveal + counters + bars ---- */
+        function initReveal(){
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (!e.isIntersecting) return;
+                    e.target.classList.add('in');
+                    e.target.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.level + '%');
+                    e.target.querySelectorAll('[data-count]').forEach(animateCount);
+                    io.unobserve(e.target);
+                });
+            }, { threshold: 0.15 });
+            document.querySelectorAll('.reveal').forEach(el => io.observe(el));
         }
 
+        function animateCount(el){
+            const target = +el.dataset.count, suffix = el.dataset.suffix || '';
+            let cur = 0; const step = Math.max(1, Math.ceil(target / 45));
+            const t = setInterval(() => {
+                cur += step;
+                if (cur >= target){ cur = target; clearInterval(t); }
+                el.textContent = cur + suffix;
+            }, 28);
+        }
+
+        /* ---- Carousel ---- */
+        function handleResize(){
+            if (window.innerWidth < 768) itemsPerPage = 1;
+            else if (window.innerWidth < 1024) itemsPerPage = 2;
+            else itemsPerPage = Math.min(3, projectsData.length);
+            if (currentProjectIndex > projectsData.length - itemsPerPage) currentProjectIndex = Math.max(0, projectsData.length - itemsPerPage);
+            updateCarousel();
+        }
         window.addEventListener('resize', handleResize);
 
-        function renderProjects() {
-            // We only render the items once, then just translate the track
-            carouselTrack.innerHTML = projectsData.map((project, index) => `
-                <div class="flex-shrink-0 px-4 carousel-item" style="width: 100%;">
-                    <div class="bg-neutral-900 group hover:-translate-y-2 transition-transform duration-300 border-l-4 border-transparent hover:border-red-600 h-full flex flex-col">
-                        <div class="h-48 bg-neutral-800 relative overflow-hidden flex items-center justify-center flex-shrink-0">
-                            <div class="absolute inset-0 bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-800/50 transition-colors">
-                                <i data-lucide="terminal" class="w-12 h-12 text-neutral-700 group-hover:text-red-600 transition-colors"></i>
-                            </div>
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 backdrop-blur-sm">
-                                <a href="${project.url}" class="p-2 bg-red-600 rounded-full text-white hover:bg-red-700"><i data-lucide="external-link" class="w-5 h-5"></i></a>
-                                <button class="p-2 bg-white rounded-full text-black hover:bg-gray-200" style="display:none;><i data-lucide="github" class="w-5 h-5""></i></button>
-                            </div>
+        function renderProjects(){
+            carouselTrack.innerHTML = projectsData.map(p => `
+                <div class="flex-shrink-0 px-4 carousel-item" style="width:100%;">
+                    <div class="card-neon group rounded-2xl overflow-hidden h-full flex flex-col hover:-translate-y-2 transition-transform duration-300">
+                        <div class="h-48 relative overflow-hidden flex items-center justify-center bg-gradient-to-br from-white/5 to-transparent">
+                            <div class="absolute inset-0 opacity-20" style="background-image:linear-gradient(rgba(34,211,238,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(217,70,239,.4) 1px,transparent 1px);background-size:24px 24px;"></div>
+                            <i data-lucide="${p.icon}" class="w-14 h-14 text-neutral-600 group-hover:text-neon-cyan group-hover:scale-110 transition-all relative z-10 drop-shadow-[0_0_14px_rgba(34,211,238,.5)]"></i>
+                            ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                <span class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-neon-magenta to-neon-red text-white font-semibold text-sm shadow-[0_0_20px_rgba(217,70,239,.5)]">Visitar <i data-lucide="external-link" class="w-4 h-4"></i></span>
+                            </a>` : ''}
                         </div>
-                        <div class="p-8 flex-grow flex flex-col">
-                            <span class="text-red-500 text-xs font-bold uppercase tracking-wide">${project.type}</span>
-                            <h3 class="text-xl font-bold text-white mt-2 mb-3">${project.title}</h3>
-                            <p class="text-neutral-400 text-sm mb-6 leading-relaxed flex-grow">${project.desc}</p>
+                        <div class="p-7 flex-grow flex flex-col">
+                            <span class="font-mono text-xs font-bold uppercase tracking-wide text-grad">${p.type}</span>
+                            <h3 class="text-xl font-bold text-white mt-2 mb-3">${p.title}</h3>
+                            <p class="text-neutral-400 text-sm mb-6 leading-relaxed flex-grow">${p.desc}</p>
                             <div class="flex flex-wrap gap-2 mt-auto">
-                                ${project.tags.map(tag => `<span class="px-3 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-sm border border-neutral-700">${tag}</span>`).join('')}
+                                ${p.tags.map(tag => `<span class="px-3 py-1 bg-white/5 text-neutral-300 text-xs rounded-md border border-white/10 font-mono">${tag}</span>`).join('')}
                             </div>
                         </div>
                     </div>
                 </div>
             `).join('');
-            
-            // Re-run icons for injected content
             if (window.lucide) lucide.createIcons();
         }
 
-        function updateCarousel() {
-            // Update width of each item based on current itemsPerPage
-            const items = document.querySelectorAll('.carousel-item');
-            items.forEach(item => {
-                item.style.width = `${100 / itemsPerPage}%`;
-            });
-
-            // Calculate translation
-            const translateValue = -(currentProjectIndex * (100 / itemsPerPage));
-            carouselTrack.style.transform = `translateX(${translateValue}%)`;
-            
+        function updateCarousel(){
+            document.querySelectorAll('.carousel-item').forEach(item => item.style.width = `${100 / itemsPerPage}%`);
+            carouselTrack.style.transform = `translateX(${-(currentProjectIndex * (100 / itemsPerPage))}%)`;
             renderIndicators();
         }
 
-        function renderIndicators() {
-            const totalPages = Math.ceil(projectsData.length / itemsPerPage) + (itemsPerPage === 1 ? 0 : 0); 
-            // Simplified logic: Create dot for each possible start position that makes sense?
-            // Let's stick to the React logic: One dot per item, highlight current, hide unattainable ones
-            
-            indicatorsContainer.innerHTML = projectsData.map((_, idx) => {
-                const isHidden = idx > projectsData.length - itemsPerPage;
-                const isActive = idx === currentProjectIndex;
-                const widthClass = isActive ? 'w-8 bg-red-600' : 'w-2 bg-neutral-800 hover:bg-neutral-700';
-                
-                if (isHidden) return '';
-                
-                return `<button onclick="goToProject(${idx})" class="h-1 transition-all duration-300 ${widthClass}"></button>`;
-            }).join('');
+        function renderIndicators(){
+            const maxIndex = Math.max(0, projectsData.length - itemsPerPage);
+            let dots = '';
+            for (let i = 0; i <= maxIndex; i++){
+                const active = i === currentProjectIndex;
+                dots += `<button onclick="goToProject(${i})" class="h-1.5 rounded-full transition-all duration-300 ${active ? 'w-8 bg-gradient-to-r from-neon-cyan to-neon-magenta' : 'w-2 bg-white/15 hover:bg-white/30'}"></button>`;
+            }
+            indicatorsContainer.innerHTML = dots;
         }
 
-        window.goToProject = (index) => {
-            currentProjectIndex = index;
-            updateCarousel();
-        };
+        window.goToProject = (i) => { currentProjectIndex = i; updateCarousel(); };
 
         nextBtn.addEventListener('click', () => {
-            if (currentProjectIndex + 1 > projectsData.length - itemsPerPage) {
-                currentProjectIndex = 0;
-            } else {
-                currentProjectIndex++;
-            }
+            const maxIndex = projectsData.length - itemsPerPage;
+            currentProjectIndex = currentProjectIndex + 1 > maxIndex ? 0 : currentProjectIndex + 1;
             updateCarousel();
         });
-
         prevBtn.addEventListener('click', () => {
-            if (currentProjectIndex - 1 < 0) {
-                currentProjectIndex = projectsData.length - itemsPerPage;
-            } else {
-                currentProjectIndex--;
-            }
+            const maxIndex = projectsData.length - itemsPerPage;
+            currentProjectIndex = currentProjectIndex - 1 < 0 ? maxIndex : currentProjectIndex - 1;
             updateCarousel();
         });
 
+        /* ---- Cursor spotlight ---- */
+        window.addEventListener('pointermove', (e) => {
+            document.getElementById('spotlight').style.setProperty('--mx', e.clientX + 'px');
+            document.getElementById('spotlight').style.setProperty('--my', e.clientY + 'px');
+        });
+
+        /* ---- Particles ---- */
+        (function particles(){
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
+            let w, h, dots = [];
+            const colors = ['#22d3ee','#d946ef','#ff2a4d','#a855f7'];
+            function resize(){
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                const count = Math.min(70, Math.floor(w / 22));
+                dots = Array.from({length:count}, () => ({
+                    x: Math.random()*w, y: Math.random()*h,
+                    vx: (Math.random()-.5)*.35, vy: (Math.random()-.5)*.35,
+                    r: Math.random()*1.8+.6, c: colors[Math.floor(Math.random()*colors.length)]
+                }));
+            }
+            function draw(){
+                ctx.clearRect(0,0,w,h);
+                for (const d of dots){
+                    d.x += d.vx; d.y += d.vy;
+                    if (d.x<0||d.x>w) d.vx*=-1;
+                    if (d.y<0||d.y>h) d.vy*=-1;
+                    ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+                    ctx.fillStyle = d.c; ctx.globalAlpha = .55; ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(draw);
+            }
+            resize(); draw();
+            window.addEventListener('resize', resize);
+        })();
     </script>
 
+    <!-- ============ FORM WEBHOOK ============ -->
     <script>
         const WEBHOOK_URL = 'https://curso-n8n-n8n.kraqr1.easypanel.host/webhook/007225f7-8a81-4533-9601-88af2b6c612e';
         const form = document.querySelector('form');
 
         form.onsubmit = async (e) => {
             e.preventDefault();
-            
-            // Capturamos el botón para dar feedback visual
-            const btn = form.querySelector('button');
+            const btn = form.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
             btn.innerHTML = 'PROCESANDO...';
             btn.disabled = true;
 
-            // n8n puede recibir FormData directamente si el nodo Webhook está configurado así,
-            // pero lo más seguro es enviar un JSON estructurado.
             const formData = new FormData(form);
             const payload = {
                 nombre: formData.get('nombre'),
@@ -516,18 +671,12 @@
             try {
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 if (response.ok) {
-                    const result = await response.json();
-                    if(result.state === "success") {
-                        alert('Transmisión exitosa. Los datos están en mis manos, pronto te responderé.');
-                        form.reset();
-                    }
+                    alert('Transmisión exitosa. Los datos están en mis manos, pronto te responderé.');
+                    form.reset();
                 } else {
                     throw new Error('Fallo en la respuesta del servidor');
                 }
@@ -537,6 +686,7 @@
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+                lucide.createIcons();
             }
         };
     </script>
